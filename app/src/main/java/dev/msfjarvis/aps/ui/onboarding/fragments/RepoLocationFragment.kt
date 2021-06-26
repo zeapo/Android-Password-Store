@@ -157,7 +157,9 @@ class RepoLocationFragment : Fragment(R.layout.fragment_repo_location) {
       if (!PasswordRepository.isInitialized) {
         PasswordRepository.initialize()
       }
-      parentFragmentManager.performTransactionWithBackStack(KeySelectionFragment.newInstance())
+      parentFragmentManager.performTransactionWithBackStack(
+        GopenpgpKeySelectionFragment.newInstance()
+      )
     }
       .onFailure { e ->
         e(e)
