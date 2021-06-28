@@ -1,5 +1,6 @@
 package dev.msfjarvis.aps.ui.onboarding.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.github.michaelbull.result.Err
@@ -61,9 +62,13 @@ class KeySelectionViewModel @Inject constructor(private val keyManager: KeyManag
         Regex("END .* PRIVATE KEY").containsMatchIn(lines.last()))
   }
 
-  private suspend fun createGpgIdFile(): Result<Unit, Throwable> = withContext(Dispatchers.IO) {
-    return@withContext keyManager.listKeyIds().map { keys ->
-      val idFile = File(PasswordRepository.getRepositoryDirectory(), ".gpg-id")
-      idFile.writeText((keys + "").joinToString("\n"))
+  private suspend fun createGpgIdFile(): Result<Unit, Throwable> =
+    withContext(Dispatchers.IO) {
+      return@withContext keyManager.listKeyIds().map { keys ->
+        Log.d("CreateIdFile", "$keys")
+        val idFile = File(PasswordRepository.getRepositoryDirectory(), ".gpg-id")
+        idFile.createNewFile()
+        idFile.writeText((keys + "").joinToString("\n"))
+      }
     }
 }

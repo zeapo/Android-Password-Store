@@ -10,6 +10,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import dagger.multibindings.IntoSet
+import dev.msfjarvis.aps.data.crypto.AndroidKeyManager
 import dev.msfjarvis.aps.data.crypto.CryptoHandler
 import dev.msfjarvis.aps.data.crypto.GopenpgpCryptoHandler
 
@@ -22,8 +23,12 @@ import dev.msfjarvis.aps.data.crypto.GopenpgpCryptoHandler
 object CryptoHandlerModule {
   @Provides
   @IntoSet
-  fun providePgpCryptoHandler(): CryptoHandler {
-    return GopenpgpCryptoHandler()
+  fun providePgpCryptoHandler(
+    gpgKeyManager: AndroidKeyManager,
+  ): CryptoHandler {
+    return GopenpgpCryptoHandler(
+      gpgKeyManager,
+    )
   }
 }
 

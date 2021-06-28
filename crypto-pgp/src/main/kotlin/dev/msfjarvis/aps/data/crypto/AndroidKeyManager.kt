@@ -3,6 +3,7 @@ package dev.msfjarvis.aps.data.crypto
 import com.github.michaelbull.result.Err
 import com.github.michaelbull.result.Result
 import com.github.michaelbull.result.runCatching
+import com.proton.Gopenpgp.crypto.Crypto
 import com.proton.Gopenpgp.crypto.Key
 import java.io.File
 import kotlinx.coroutines.CoroutineDispatcher
@@ -16,18 +17,21 @@ public class AndroidKeyManager(
 
   private val keyDir = File(filesDirPath, KeyDir)
 
-  override suspend fun addKey(stringKey: String): Result<String, Throwable> = withContext(dispatcher) {
-    return@withContext addKey(Key(stringKey))
-  }
+  override suspend fun addKey(stringKey: String): Result<String, Throwable> =
+    withContext(dispatcher) {
+      return@withContext addKey(Crypto.newKeyFromArmored(stringKey))
+    }
 
   override suspend fun addKey(key: Key): Result<String, Throwable> =
     withContext(dispatcher) {
       if (!keyDirExists())
         return@withContext Err(IllegalStateException("Key directory does not exist"))
 
-    return@withContext runCatching {
-      val keyFile = File(keyDir, "${key.hexKeyID}.key")
-      keyFile.writeText(key.armor())
+      return@withContext runCatching {
+        val keyFile = File(keyDir, "${key.hexKeyID}.key")
+        if (keyFile.exists()) keyFile.delete()
+
+        keyFile.writeText(key.armor())
 
         key.hexKeyID
       }
