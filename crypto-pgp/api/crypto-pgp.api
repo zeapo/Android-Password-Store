@@ -1,4 +1,4 @@
-public final class dev/msfjarvis/aps/data/crypto/AndroidKeyManager : dev/msfjarvis/aps/data/crypto/KeyManager {
+public final class dev/msfjarvis/aps/data/crypto/GPGKeyManager : dev/msfjarvis/aps/data/crypto/KeyManager {
 	public fun <init> (Ljava/lang/String;Lkotlinx/coroutines/CoroutineDispatcher;)V
 	public synthetic fun <init> (Ljava/lang/String;Lkotlinx/coroutines/CoroutineDispatcher;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public fun addKey (Lcom/proton/Gopenpgp/crypto/Key;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
@@ -10,7 +10,7 @@ public final class dev/msfjarvis/aps/data/crypto/AndroidKeyManager : dev/msfjarv
 }
 
 public final class dev/msfjarvis/aps/data/crypto/GopenpgpCryptoHandler : dev/msfjarvis/aps/data/crypto/CryptoHandler {
-	public fun <init> (Ldev/msfjarvis/aps/data/crypto/AndroidKeyManager;)V
+	public fun <init> (Ldev/msfjarvis/aps/data/crypto/GPGKeyManager;)V
 	public fun canHandle (Ljava/lang/String;)Z
 	public fun decrypt (Ljava/lang/String;[B[B)[B
 	public final fun decryptFromKeyId (Ljava/lang/String;[BLjava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;

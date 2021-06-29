@@ -11,9 +11,8 @@ import com.proton.Gopenpgp.helper.Helper
 import javax.inject.Inject
 
 /** Gopenpgp backed implementation of [CryptoHandler]. */
-public class GopenpgpCryptoHandler
-@Inject
-constructor(private val gpgKeyManager: AndroidKeyManager) : CryptoHandler {
+public class GopenpgpCryptoHandler @Inject constructor(private val gpgKeyManager: GPGKeyManager) :
+  CryptoHandler {
 
   /**
    * Decrypt the given [ciphertext] using the given PGP [privateKey] and corresponding [passphrase].

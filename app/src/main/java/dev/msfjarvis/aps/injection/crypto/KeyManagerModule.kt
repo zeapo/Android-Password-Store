@@ -10,7 +10,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import dev.msfjarvis.aps.data.crypto.AndroidKeyManager
+import dev.msfjarvis.aps.data.crypto.GPGKeyManager
 import dev.msfjarvis.aps.data.crypto.KeyManager
 import dev.msfjarvis.aps.injection.context.FilesDirPath
 
@@ -18,14 +18,14 @@ import dev.msfjarvis.aps.injection.context.FilesDirPath
 @InstallIn(SingletonComponent::class)
 abstract class KeyManagerModule {
 
-  @Binds abstract fun bindKeyManager(androidKeyManager: AndroidKeyManager): KeyManager
+  @Binds abstract fun bindKeyManager(gpgKeyManager: GPGKeyManager): KeyManager
 
   internal companion object {
 
     @Provides
-    fun providesAndroidKeyManager(@FilesDirPath filesDirPath: String): AndroidKeyManager {
+    fun providesGPGKeyManager(@FilesDirPath filesDirPath: String): GPGKeyManager {
       // TODO: Use dagger for coroutine dispatchers
-      return AndroidKeyManager(filesDirPath)
+      return GPGKeyManager(filesDirPath)
     }
   }
 }
