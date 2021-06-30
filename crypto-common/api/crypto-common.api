@@ -4,3 +4,9 @@ public abstract interface class dev/msfjarvis/aps/data/crypto/CryptoHandler {
 	public abstract fun encrypt (Ljava/lang/String;[B)[B
 }
 
+public abstract interface class dev/msfjarvis/aps/data/crypto/KeyPair {
+	public abstract fun getKeyId ()Ljava/lang/String;
+	public abstract fun getPrivateKey ()[B
+	public abstract fun getPublicKey ()[B
+}
+
