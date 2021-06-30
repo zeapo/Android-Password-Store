@@ -8,6 +8,17 @@ public final class dev/msfjarvis/aps/data/crypto/GPGKeyManager : dev/msfjarvis/a
 	public fun removeKey (Lcom/proton/Gopenpgp/crypto/Key;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
+public final class dev/msfjarvis/aps/data/crypto/GPGKeyPair : dev/msfjarvis/aps/data/crypto/KeyPair {
+	public fun <init> (Lcom/proton/Gopenpgp/crypto/Key;)V
+	public fun getKeyId ()Ljava/lang/String;
+	public fun getPrivateKey ()[B
+	public fun getPublicKey ()[B
+}
+
+public abstract interface class dev/msfjarvis/aps/data/crypto/GPGKeyPair$Factory {
+	public abstract fun create (Lcom/proton/Gopenpgp/crypto/Key;)Ldev/msfjarvis/aps/data/crypto/GPGKeyPair;
+}
+
 public final class dev/msfjarvis/aps/data/crypto/GopenpgpCryptoHandler : dev/msfjarvis/aps/data/crypto/CryptoHandler {
 	public fun <init> (Ldev/msfjarvis/aps/data/crypto/GPGKeyManager;)V
 	public fun canHandle (Ljava/lang/String;)Z
