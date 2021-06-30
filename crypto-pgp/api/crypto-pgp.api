@@ -1,6 +1,5 @@
 public final class dev/msfjarvis/aps/data/crypto/GPGKeyManager : dev/msfjarvis/aps/data/crypto/KeyManager {
 	public fun <init> (Ljava/lang/String;Lkotlinx/coroutines/CoroutineDispatcher;)V
-	public synthetic fun <init> (Ljava/lang/String;Lkotlinx/coroutines/CoroutineDispatcher;ILkotlin/jvm/internal/DefaultConstructorMarker;)V
 	public fun addKey (Lcom/proton/Gopenpgp/crypto/Key;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun addKey (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun findKeyById (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;

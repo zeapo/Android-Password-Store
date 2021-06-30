@@ -14,5 +14,4 @@ dependencies {
   implementation(libs.dagger.hilt.core)
   implementation(libs.thirdparty.kotlinResult)
   implementation(libs.kotlin.coroutines.core)
-  implementation(libs.kotlin.coroutines.android)
 }

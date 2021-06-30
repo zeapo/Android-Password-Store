@@ -13,6 +13,8 @@ import dagger.hilt.components.SingletonComponent
 import dev.msfjarvis.aps.data.crypto.GPGKeyManager
 import dev.msfjarvis.aps.data.crypto.KeyManager
 import dev.msfjarvis.aps.injection.context.FilesDirPath
+import dev.msfjarvis.aps.injection.coroutines.IODispatcher
+import kotlinx.coroutines.CoroutineDispatcher
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -23,9 +25,11 @@ abstract class KeyManagerModule {
   internal companion object {
 
     @Provides
-    fun providesGPGKeyManager(@FilesDirPath filesDirPath: String): GPGKeyManager {
-      // TODO: Use dagger for coroutine dispatchers
-      return GPGKeyManager(filesDirPath)
+    fun providesGPGKeyManager(
+      @FilesDirPath filesDirPath: String,
+      @IODispatcher dispatcher: CoroutineDispatcher,
+    ): GPGKeyManager {
+      return GPGKeyManager(filesDirPath, dispatcher)
     }
   }
 }

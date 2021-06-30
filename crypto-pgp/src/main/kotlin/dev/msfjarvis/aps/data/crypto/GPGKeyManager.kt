@@ -7,12 +7,11 @@ import com.proton.Gopenpgp.crypto.Crypto
 import com.proton.Gopenpgp.crypto.Key
 import java.io.File
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 public class GPGKeyManager(
   filesDirPath: String,
-  private val dispatcher: CoroutineDispatcher = Dispatchers.IO
+  private val dispatcher: CoroutineDispatcher,
 ) : KeyManager {
 
   private val keyDir = File(filesDirPath, KeyDir)
