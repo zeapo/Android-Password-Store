@@ -4,6 +4,15 @@ public abstract interface class dev/msfjarvis/aps/data/crypto/CryptoHandler {
 	public abstract fun encrypt (Ljava/lang/String;[B)[B
 }
 
+public abstract interface class dev/msfjarvis/aps/data/crypto/KeyManager {
+	public abstract fun addKey (Ldev/msfjarvis/aps/data/crypto/KeyPair;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun addKey (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun findKeyById (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun listKeyIds (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun listKeys (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun removeKey (Ldev/msfjarvis/aps/data/crypto/KeyPair;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
 public abstract interface class dev/msfjarvis/aps/data/crypto/KeyPair {
 	public abstract fun getKeyId ()Ljava/lang/String;
 	public abstract fun getPrivateKey ()[B

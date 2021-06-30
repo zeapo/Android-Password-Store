@@ -1,11 +1,13 @@
 public final class dev/msfjarvis/aps/data/crypto/GPGKeyManager : dev/msfjarvis/aps/data/crypto/KeyManager {
-	public fun <init> (Ljava/lang/String;Lkotlinx/coroutines/CoroutineDispatcher;)V
-	public fun addKey (Lcom/proton/Gopenpgp/crypto/Key;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun <init> (Ljava/lang/String;Lkotlinx/coroutines/CoroutineDispatcher;Ldev/msfjarvis/aps/data/crypto/GPGKeyPair$Factory;)V
+	public fun addKey (Ldev/msfjarvis/aps/data/crypto/GPGKeyPair;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public synthetic fun addKey (Ldev/msfjarvis/aps/data/crypto/KeyPair;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun addKey (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun findKeyById (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun listKeyIds (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun listKeys (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public fun removeKey (Lcom/proton/Gopenpgp/crypto/Key;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun removeKey (Ldev/msfjarvis/aps/data/crypto/GPGKeyPair;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public synthetic fun removeKey (Ldev/msfjarvis/aps/data/crypto/KeyPair;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 
 public final class dev/msfjarvis/aps/data/crypto/GPGKeyPair : dev/msfjarvis/aps/data/crypto/KeyPair {
@@ -25,14 +27,5 @@ public final class dev/msfjarvis/aps/data/crypto/GopenpgpCryptoHandler : dev/msf
 	public fun decrypt (Ljava/lang/String;[B[B)[B
 	public final fun decryptFromKeyId (Ljava/lang/String;[BLjava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun encrypt (Ljava/lang/String;[B)[B
-}
-
-public abstract interface class dev/msfjarvis/aps/data/crypto/KeyManager {
-	public abstract fun addKey (Lcom/proton/Gopenpgp/crypto/Key;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public abstract fun addKey (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public abstract fun findKeyById (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public abstract fun listKeyIds (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public abstract fun listKeys (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public abstract fun removeKey (Lcom/proton/Gopenpgp/crypto/Key;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 

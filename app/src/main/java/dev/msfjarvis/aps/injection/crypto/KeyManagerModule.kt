@@ -5,13 +5,12 @@
 
 package dev.msfjarvis.aps.injection.crypto
 
-import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import dev.msfjarvis.aps.data.crypto.GPGKeyManager
-import dev.msfjarvis.aps.data.crypto.KeyManager
+import dev.msfjarvis.aps.data.crypto.GPGKeyPair
 import dev.msfjarvis.aps.injection.context.FilesDirPath
 import dev.msfjarvis.aps.injection.coroutines.IODispatcher
 import kotlinx.coroutines.CoroutineDispatcher
@@ -20,16 +19,19 @@ import kotlinx.coroutines.CoroutineDispatcher
 @InstallIn(SingletonComponent::class)
 abstract class KeyManagerModule {
 
-  @Binds abstract fun bindKeyManager(gpgKeyManager: GPGKeyManager): KeyManager
-
   internal companion object {
 
     @Provides
     fun providesGPGKeyManager(
       @FilesDirPath filesDirPath: String,
       @IODispatcher dispatcher: CoroutineDispatcher,
+      gpgKeyFactory: GPGKeyPair.Factory,
     ): GPGKeyManager {
-      return GPGKeyManager(filesDirPath, dispatcher)
+      return GPGKeyManager(
+        filesDirPath,
+        dispatcher,
+        gpgKeyFactory,
+      )
     }
   }
 }

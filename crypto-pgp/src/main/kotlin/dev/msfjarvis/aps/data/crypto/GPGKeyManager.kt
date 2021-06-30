@@ -12,38 +12,39 @@ import kotlinx.coroutines.withContext
 public class GPGKeyManager(
   filesDirPath: String,
   private val dispatcher: CoroutineDispatcher,
-) : KeyManager {
+  private val keyFactory: GPGKeyPair.Factory,
+) : KeyManager<GPGKeyPair> {
 
   private val keyDir = File(filesDirPath, KeyDir)
 
   override suspend fun addKey(stringKey: String): Result<String, Throwable> =
     withContext(dispatcher) {
-      return@withContext addKey(Crypto.newKeyFromArmored(stringKey))
+      return@withContext addKey(keyFactory.create(Crypto.newKeyFromArmored(stringKey)))
     }
 
-  override suspend fun addKey(key: Key): Result<String, Throwable> =
+  override suspend fun addKey(key: GPGKeyPair): Result<String, Throwable> =
     withContext(dispatcher) {
       if (!keyDirExists())
         return@withContext Err(IllegalStateException("Key directory does not exist"))
 
       return@withContext runCatching {
-        val keyFile = File(keyDir, "${key.hexKeyID}.key")
+        val keyFile = File(keyDir, "${key.getKeyId()}.key")
         if (keyFile.exists()) keyFile.delete()
 
-        keyFile.writeText(key.armor())
+        keyFile.writeText(key.getPrivateKey().decodeToString())
 
-        key.hexKeyID
+        key.getKeyId()
       }
     }
 
-  override suspend fun removeKey(key: Key): Result<String, Throwable> =
+  override suspend fun removeKey(key: GPGKeyPair): Result<String, Throwable> =
     withContext(dispatcher) {
       if (!keyDirExists())
         return@withContext Err(IllegalStateException("Key directory does not exist"))
 
       return@withContext runCatching {
-        val hexID = key.hexKeyID
-        val keyFile = File(keyDir, "${key.hexKeyID}.key")
+        val hexID = key.getKeyId()
+        val keyFile = File(keyDir, "$hexID.key")
         if (!keyFile.exists()) {
           error("Key does not exist")
         }
@@ -55,7 +56,7 @@ public class GPGKeyManager(
       }
     }
 
-  override suspend fun findKeyById(id: String): Result<Key, Throwable> =
+  override suspend fun findKeyById(id: String): Result<GPGKeyPair, Throwable> =
     withContext(dispatcher) {
       if (!keyDirExists())
         return@withContext Err(IllegalStateException("Key directory does not exist"))
@@ -64,7 +65,7 @@ public class GPGKeyManager(
         keyDir.listFiles()?.forEach { file ->
           if (file.isFile && file.nameWithoutExtension == id) {
             val fileContent = file.readText()
-            return@runCatching Key(fileContent)
+            return@runCatching keyFactory.create(Key(fileContent))
           }
         }
 
@@ -72,18 +73,18 @@ public class GPGKeyManager(
       }
     }
 
-  override suspend fun listKeys(): Result<List<Key>, Throwable> =
+  override suspend fun listKeys(): Result<List<GPGKeyPair>, Throwable> =
     withContext(dispatcher) {
       if (!keyDirExists())
         return@withContext Err(IllegalStateException("Key directory does not exist"))
 
       return@withContext runCatching {
-        val keyList = arrayListOf<Key>()
+        val keyList = arrayListOf<GPGKeyPair>()
 
         keyDir.listFiles()?.forEach { file ->
           if (file.isFile && file.extension == "key") {
             val fileContent = file.readText()
-            keyList.add(Key(fileContent))
+            keyList.add(keyFactory.create(Key(fileContent)))
           }
         }
 

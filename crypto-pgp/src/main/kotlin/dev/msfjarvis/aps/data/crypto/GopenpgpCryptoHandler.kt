@@ -62,7 +62,7 @@ public class GopenpgpCryptoHandler @Inject constructor(private val gpgKeyManager
     val key = gpgKeyManager.findKeyById(id).unwrap()
     val message = Crypto.newPGPMessageFromArmored(ciphertext)
     return Helper.decryptMessageArmored(
-        key.armor(),
+        key.getPrivateKey().decodeToString(),
         passphrase,
         message.armored,
       )

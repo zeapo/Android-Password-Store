@@ -9,7 +9,7 @@ import com.github.michaelbull.result.Result
 import com.github.michaelbull.result.map
 import com.github.michaelbull.result.onFailure
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dev.msfjarvis.aps.data.crypto.KeyManager
+import dev.msfjarvis.aps.data.crypto.GPGKeyManager
 import dev.msfjarvis.aps.data.repo.PasswordRepository
 import java.io.File
 import java.io.InputStream
@@ -21,7 +21,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 @HiltViewModel
-class KeySelectionViewModel @Inject constructor(private val keyManager: KeyManager) : ViewModel() {
+class KeySelectionViewModel @Inject constructor(private val keyManager: GPGKeyManager) :
+  ViewModel() {
 
   private val _importKeyStatus = MutableSharedFlow<Result<Unit, Throwable>>()
   val importKeyStatus = _importKeyStatus.asSharedFlow()

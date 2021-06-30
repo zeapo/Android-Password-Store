@@ -10,7 +10,9 @@ plugins {
 
 dependencies {
   api(projects.cryptoCommon)
-  implementation(libs.aps.gopenpgp)
+  // We need to expose this as an API dependency so that Hilt
+  // can see it during code generation.
+  api(libs.aps.gopenpgp)
   implementation(libs.dagger.hilt.core)
   implementation(libs.thirdparty.kotlinResult)
   implementation(libs.kotlin.coroutines.core)
