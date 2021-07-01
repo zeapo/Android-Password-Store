@@ -107,6 +107,7 @@ internal fun TestedExtension.configureCommonAndroidOptions() {
   sourceSets {
     named("main") { java.srcDirs("src/main/kotlin") }
     named("test") { java.srcDirs("src/test/kotlin") }
+    named("androidTest") { java.srcDirs("src/androidTest/kotlin") }
   }
 
   packagingOptions {
