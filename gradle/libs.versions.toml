@@ -98,6 +98,7 @@ testing-junit = "junit:junit:4.13.2"
 testing-kotlintest-junit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlin" }
 testing-robolectric = "org.robolectric:robolectric:4.6"
 testing-sharedPrefsMock = "com.github.IvanShafran:shared-preferences-mock:1.0"
+testing-hilt-android = { module = "com.google.dagger:hilt-android-testing", version.ref = "hilt" }
 androidx-testing-rules = { module = "androidx.test:rules", version.ref="androidx_test" }
 androidx-testing-runner = { module = "androidx.test:runner", version.ref="androidx_test" }
 kotlin-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
