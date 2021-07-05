@@ -3,6 +3,7 @@ public final class dev/msfjarvis/aps/data/crypto/GPGKeyManager : dev/msfjarvis/a
 	public fun addKey (Ldev/msfjarvis/aps/data/crypto/GPGKeyPair;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public synthetic fun addKey (Ldev/msfjarvis/aps/data/crypto/KeyPair;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun addKey (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun canHandle (Ljava/lang/String;)Z
 	public fun findKeyById (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun listKeyIds (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun listKeys (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
@@ -22,10 +23,9 @@ public abstract interface class dev/msfjarvis/aps/data/crypto/GPGKeyPair$Factory
 }
 
 public final class dev/msfjarvis/aps/data/crypto/GopenpgpCryptoHandler : dev/msfjarvis/aps/data/crypto/CryptoHandler {
-	public fun <init> (Ldev/msfjarvis/aps/data/crypto/GPGKeyManager;)V
+	public fun <init> ()V
 	public fun canHandle (Ljava/lang/String;)Z
 	public fun decrypt (Ljava/lang/String;[B[B)[B
-	public final fun decryptFromKeyId (Ljava/lang/String;[BLjava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun encrypt (Ljava/lang/String;[B)[B
 }
 
