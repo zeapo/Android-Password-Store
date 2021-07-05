@@ -15,4 +15,7 @@ public interface KeyManager<T : KeyPair> {
   public suspend fun findKeyById(id: String): Result<T, Throwable>
   public suspend fun listKeys(): Result<List<T>, Throwable>
   public suspend fun listKeyIds(): Result<List<String>, Throwable>
+
+  /** Given a [fileName], return whether this instance can handle it. */
+  public fun canHandle(fileName: String): Boolean
 }

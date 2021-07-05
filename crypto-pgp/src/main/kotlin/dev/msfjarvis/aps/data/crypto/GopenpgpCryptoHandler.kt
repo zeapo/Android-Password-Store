@@ -5,14 +5,12 @@
 
 package dev.msfjarvis.aps.data.crypto
 
-import com.github.michaelbull.result.unwrap
 import com.proton.Gopenpgp.crypto.Crypto
 import com.proton.Gopenpgp.helper.Helper
 import javax.inject.Inject
 
 /** Gopenpgp backed implementation of [CryptoHandler]. */
-public class GopenpgpCryptoHandler @Inject constructor(private val gpgKeyManager: GPGKeyManager) :
-  CryptoHandler {
+public class GopenpgpCryptoHandler @Inject constructor() : CryptoHandler {
 
   /**
    * Decrypt the given [ciphertext] using the given PGP [privateKey] and corresponding [passphrase].
@@ -47,25 +45,5 @@ public class GopenpgpCryptoHandler @Inject constructor(private val gpgKeyManager
 
   override fun canHandle(fileName: String): Boolean {
     return fileName.split('.').last() == "gpg"
-  }
-
-  /**
-   * TODO: Find a better place for this method Utility method to decrypt the given [ciphertext]
-   * using the given PGP key [id] and corresponding [passphrase].
-   */
-  public suspend fun decryptFromKeyId(
-    id: String,
-    passphrase: ByteArray,
-    ciphertext: String,
-  ): ByteArray {
-    // TODO(aditya): Handle error cases
-    val key = gpgKeyManager.findKeyById(id).unwrap()
-    val message = Crypto.newPGPMessageFromArmored(ciphertext)
-    return Helper.decryptMessageArmored(
-        key.getPrivateKey().decodeToString(),
-        passphrase,
-        message.armored,
-      )
-      .toByteArray()
   }
 }

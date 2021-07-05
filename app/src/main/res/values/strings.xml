@@ -400,4 +400,8 @@
   <string name="gpg_key_select_mandatory">Selecting a GPG key is necessary to proceed</string>
   <string name="place_shortcut_on_home_screen">Place shortcut on home screen</string>
 
+  <!-- Gopenpgp Decrypt activity -->
+  <string name="passphrase_input_title">Enter Key Passphrase</string>
+  <string name="passphrase_input_hint">Passphrase</string>
+
 </resources>

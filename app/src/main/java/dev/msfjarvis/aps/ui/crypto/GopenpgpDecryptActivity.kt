@@ -10,14 +10,20 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.lifecycle.lifecycleScope
+import com.github.michaelbull.result.unwrap
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import dev.msfjarvis.aps.R
 import dev.msfjarvis.aps.data.passfile.PasswordEntry
 import dev.msfjarvis.aps.data.password.FieldItem
+import dev.msfjarvis.aps.data.repo.PasswordRepository
 import dev.msfjarvis.aps.databinding.DecryptLayoutBinding
+import dev.msfjarvis.aps.databinding.DialogPassphraseInputBinding
 import dev.msfjarvis.aps.injection.crypto.CryptoSet
+import dev.msfjarvis.aps.injection.crypto.KeyManagerSet
 import dev.msfjarvis.aps.injection.password.PasswordEntryFactory
 import dev.msfjarvis.aps.ui.adapters.FieldItemAdapter
+import dev.msfjarvis.aps.util.extensions.findTillRoot
 import dev.msfjarvis.aps.util.extensions.unsafeLazy
 import dev.msfjarvis.aps.util.extensions.viewBinding
 import java.io.File
@@ -36,10 +42,9 @@ class GopenpgpDecryptActivity : BasePgpActivity() {
   private val binding by viewBinding(DecryptLayoutBinding::inflate)
   @Inject lateinit var passwordEntryFactory: PasswordEntryFactory
   @Inject lateinit var cryptos: CryptoSet
+  @Inject lateinit var keyManagers: KeyManagerSet
   private val relativeParentPath by unsafeLazy { getParentPath(fullPath, repoPath) }
-
   private var passwordEntry: PasswordEntry? = null
-
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -53,7 +58,8 @@ class GopenpgpDecryptActivity : BasePgpActivity() {
         true
       }
     }
-    decrypt()
+
+    showPassphraseDialog()
   }
 
   override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -79,6 +85,25 @@ class GopenpgpDecryptActivity : BasePgpActivity() {
       else -> return super.onOptionsItemSelected(item)
     }
     return true
+  }
+
+  private fun showPassphraseDialog() {
+    val view = layoutInflater.inflate(R.layout.dialog_passphrase_input, binding.root, false)
+    val dialogBinding = DialogPassphraseInputBinding.bind(view)
+
+    MaterialAlertDialogBuilder(this)
+      .setView(view)
+      .setPositiveButton("Unlock") { dialog, _ ->
+        dialog.dismiss()
+        val passphrase = dialogBinding.input.text.toString().toByteArray()
+        decrypt(passphrase)
+      }
+      .setNegativeButton("Cancel") { dialog, _ ->
+        dialog.dismiss()
+        finish()
+      }
+      .setOnCancelListener { finish() }
+      .show()
   }
 
   /**
@@ -122,25 +147,33 @@ class GopenpgpDecryptActivity : BasePgpActivity() {
     )
   }
 
-  private fun decrypt() {
+  private fun decrypt(passphrase: ByteArray) {
     lifecycleScope.launch {
       // TODO(msfjarvis): native methods are fallible, add error handling once out of testing
       val message = withContext(Dispatchers.IO) { File(fullPath).readBytes() }
+      val crypto = cryptos.first { it.canHandle(fullPath) }
+      val keyManager = keyManagers.first { it.canHandle(fullPath) }
+      val keyIds = getKeyIds(fullPath)
+      if (keyIds.isEmpty()) {
+        // TODO: Show option to import gpg key here
+        return@launch
+      }
       val result =
         withContext(Dispatchers.IO) {
-          val crypto = cryptos.first { it.canHandle(fullPath) }
+          val privateKey =
+            keyManager.findKeyById(keyIds[0]).unwrap().getPrivateKey().decodeToString()
+
+          // TODO: this throws an error if passphrase is incorrect
           crypto.decrypt(
-            PRIV_KEY,
-            PASS.toByteArray(charset = Charsets.UTF_8),
+            privateKey,
+            passphrase,
             message,
           )
         }
       startAutoDismissTimer()
-
       val entry = passwordEntryFactory.create(lifecycleScope, result)
       passwordEntry = entry
       invalidateOptionsMenu()
-
       val items = arrayListOf<FieldItem>()
       val adapter = FieldItemAdapter(emptyList(), true) { text -> copyTextToClipboard(text) }
       if (!entry.password.isNullOrBlank()) {
@@ -169,7 +202,16 @@ class GopenpgpDecryptActivity : BasePgpActivity() {
     }
   }
 
+  private fun getKeyIds(currentFilePath: String): List<String> {
+    val repoRoot = PasswordRepository.getRepositoryDirectory()
+    val directory = File(currentFilePath).parentFile ?: return emptyList()
+    val gpgIdentifierFile = directory.findTillRoot(".gpg-id", repoRoot) ?: return emptyList()
+
+    return gpgIdentifierFile.readText().split("\n")
+  }
+
   companion object {
+
     // TODO(msfjarvis): source these from storage and user input
     const val PRIV_KEY = ""
     const val PASS = ""

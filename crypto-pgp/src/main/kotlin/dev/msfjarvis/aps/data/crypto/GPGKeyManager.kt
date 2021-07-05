@@ -111,6 +111,11 @@ public class GPGKeyManager(
       }
     }
 
+  override fun canHandle(fileName: String): Boolean {
+    println("Checking in " + javaClass.simpleName)
+    return fileName.split('.').last() == "gpg"
+  }
+
   private fun keyDirExists(): Boolean {
     return keyDir.exists() || keyDir.mkdir()
   }

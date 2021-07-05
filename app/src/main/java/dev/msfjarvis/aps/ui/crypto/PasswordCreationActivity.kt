@@ -41,6 +41,7 @@ import dev.msfjarvis.aps.util.autofill.DirectoryStructure
 import dev.msfjarvis.aps.util.crypto.GpgIdentifier
 import dev.msfjarvis.aps.util.extensions.base64
 import dev.msfjarvis.aps.util.extensions.commitChange
+import dev.msfjarvis.aps.util.extensions.findTillRoot
 import dev.msfjarvis.aps.util.extensions.getString
 import dev.msfjarvis.aps.util.extensions.isInsideRepository
 import dev.msfjarvis.aps.util.extensions.snackbar
@@ -138,22 +139,6 @@ class PasswordCreationActivity : BasePgpActivity(), OpenPgpServiceConnection.OnB
         )
       }
     }
-
-  private fun File.findTillRoot(fileName: String, rootPath: File): File? {
-    val gpgFile = File(this, fileName)
-    if (gpgFile.exists()) return gpgFile
-
-    if (this.absolutePath == rootPath.absolutePath) {
-      return null
-    }
-
-    val parent = parentFile
-    return if (parent != null && parent.exists()) {
-      parent.findTillRoot(fileName, rootPath)
-    } else {
-      null
-    }
-  }
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
