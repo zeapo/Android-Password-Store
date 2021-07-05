@@ -63,7 +63,7 @@ public class GPGKeyManager(
 
       return@withContext runCatching {
         keyDir.listFiles()?.forEach { file ->
-          if (file.isFile && file.nameWithoutExtension == id) {
+          if (file.isFile && file.nameWithoutExtension.lowercase() == id.lowercase()) {
             val fileContent = file.readText()
             return@runCatching keyFactory.create(Key(fileContent))
           }
