@@ -31,4 +31,8 @@ class WelcomeFragment : Fragment(R.layout.fragment_welcome) {
       startActivity(Intent(requireContext(), SettingsActivity::class.java))
     }
   }
+
+  companion object {
+    fun newInstance() = WelcomeFragment()
+  }
 }

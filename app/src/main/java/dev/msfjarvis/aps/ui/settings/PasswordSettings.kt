@@ -17,10 +17,12 @@ import de.Maxr1998.modernpreferences.helpers.editText
 import de.Maxr1998.modernpreferences.helpers.onCheckedChange
 import de.Maxr1998.modernpreferences.helpers.onClick
 import de.Maxr1998.modernpreferences.helpers.onSelectionChange
+import de.Maxr1998.modernpreferences.helpers.pref
 import de.Maxr1998.modernpreferences.helpers.singleChoice
 import de.Maxr1998.modernpreferences.preferences.CheckBoxPreference
 import de.Maxr1998.modernpreferences.preferences.choice.SelectionItem
 import dev.msfjarvis.aps.R
+import dev.msfjarvis.aps.ui.onboarding.activity.OnboardingActivity
 import dev.msfjarvis.aps.util.extensions.getString
 import dev.msfjarvis.aps.util.extensions.sharedPrefs
 import dev.msfjarvis.aps.util.extensions.unsafeLazy
@@ -117,6 +119,14 @@ class PasswordSettings(private val activity: FragmentActivity) : SettingsProvide
         titleRes = R.string.pref_copy_title
         summaryRes = R.string.pref_copy_summary
         defaultValue = false
+      }
+      pref(PreferenceKeys.IMPORT_GPG_KEY) {
+        titleRes = R.string.pref_import_gpg_key_title
+        summaryRes = R.string.pref_import_gpg_key_summary
+        onClick {
+          activity.startActivity(OnboardingActivity.createKeyImportIntent(activity))
+          true
+        }
       }
     }
   }
