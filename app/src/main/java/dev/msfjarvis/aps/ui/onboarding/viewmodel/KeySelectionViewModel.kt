@@ -1,6 +1,5 @@
 package dev.msfjarvis.aps.ui.onboarding.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.github.michaelbull.result.Err
@@ -29,7 +28,6 @@ class KeySelectionViewModel @Inject constructor(private val keyManager: GPGKeyMa
   fun importKey(keyInputStream: InputStream) {
     viewModelScope.launch {
       val lines = keyInputStream.bufferedReader().readLines()
-
       // Validate the incoming InputStream
       if (!validateKey(lines)) {
         _importKeyStatus.emit(
@@ -45,7 +43,7 @@ class KeySelectionViewModel @Inject constructor(private val keyManager: GPGKeyMa
         _importKeyStatus.emit(Err(throwable))
         return@launch
       }
-      // Create `.gpg-id` file
+      // Create `.gpg-id` file, if it does not exist
       createGpgIdFile().onFailure { throwable ->
         _importKeyStatus.emit(Err(throwable))
         return@launch
@@ -66,8 +64,9 @@ class KeySelectionViewModel @Inject constructor(private val keyManager: GPGKeyMa
   private suspend fun createGpgIdFile(): Result<Unit, Throwable> =
     withContext(Dispatchers.IO) {
       return@withContext keyManager.listKeyIds().map { keys ->
-        Log.d("CreateIdFile", "$keys")
         val idFile = File(PasswordRepository.getRepositoryDirectory(), ".gpg-id")
+        if (idFile.exists()) return@map
+
         idFile.createNewFile()
         idFile.writeText((keys + "").joinToString("\n"))
       }
