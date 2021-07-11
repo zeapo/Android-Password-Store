@@ -56,7 +56,7 @@ public class GPGKeyManager(
       }
     }
 
-  override suspend fun findKeyById(id: String): Result<GPGKeyPair, Throwable> =
+  override suspend fun getKeyById(id: String): Result<GPGKeyPair, Throwable> =
     withContext(dispatcher) {
       if (!keyDirExists())
         return@withContext Err(IllegalStateException("Key directory does not exist"))
@@ -73,7 +73,7 @@ public class GPGKeyManager(
       }
     }
 
-  override suspend fun listKeys(): Result<List<GPGKeyPair>, Throwable> =
+  override suspend fun getAllKeys(): Result<List<GPGKeyPair>, Throwable> =
     withContext(dispatcher) {
       if (!keyDirExists())
         return@withContext Err(IllegalStateException("Key directory does not exist"))
@@ -92,7 +92,7 @@ public class GPGKeyManager(
       }
     }
 
-  override suspend fun listKeyIds(): Result<List<String>, Throwable> =
+  override suspend fun getAllKeyIds(): Result<List<String>, Throwable> =
     withContext(dispatcher) {
       if (!keyDirExists())
         return@withContext Err(IllegalStateException("Key directory does not exist"))

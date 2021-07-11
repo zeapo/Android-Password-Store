@@ -12,9 +12,9 @@ public interface KeyManager<T : KeyPair> {
   public suspend fun addKey(stringKey: String): Result<String, Throwable>
   public suspend fun addKey(key: T): Result<String, Throwable>
   public suspend fun removeKey(key: T): Result<String, Throwable>
-  public suspend fun findKeyById(id: String): Result<T, Throwable>
-  public suspend fun listKeys(): Result<List<T>, Throwable>
-  public suspend fun listKeyIds(): Result<List<String>, Throwable>
+  public suspend fun getKeyById(id: String): Result<T, Throwable>
+  public suspend fun getAllKeys(): Result<List<T>, Throwable>
+  public suspend fun getAllKeyIds(): Result<List<String>, Throwable>
 
   /** Given a [fileName], return whether this instance can handle it. */
   public fun canHandle(fileName: String): Boolean

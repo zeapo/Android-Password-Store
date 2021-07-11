@@ -89,7 +89,7 @@ public class GopenpgpHandlerTest {
       assertNull(result.getError())
       val keyID = result.get()
       assertNotNull(keyID)
-      val keypair = keyManager.findKeyById(keyID).unwrap()
+      val keypair = keyManager.getKeyById(keyID).unwrap()
       val privKey = keypair.getPrivateKey().decodeToString()
       val pubKey = keypair.getPublicKey().decodeToString()
       val encrypted =

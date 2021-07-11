@@ -8,9 +8,9 @@ public abstract interface class dev/msfjarvis/aps/data/crypto/KeyManager {
 	public abstract fun addKey (Ldev/msfjarvis/aps/data/crypto/KeyPair;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public abstract fun addKey (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public abstract fun canHandle (Ljava/lang/String;)Z
-	public abstract fun findKeyById (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public abstract fun listKeyIds (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public abstract fun listKeys (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun getAllKeyIds (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun getAllKeys (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public abstract fun getKeyById (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public abstract fun removeKey (Ldev/msfjarvis/aps/data/crypto/KeyPair;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }
 

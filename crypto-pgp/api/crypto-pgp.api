@@ -4,9 +4,9 @@ public final class dev/msfjarvis/aps/data/crypto/GPGKeyManager : dev/msfjarvis/a
 	public synthetic fun addKey (Ldev/msfjarvis/aps/data/crypto/KeyPair;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun addKey (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun canHandle (Ljava/lang/String;)Z
-	public fun findKeyById (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public fun listKeyIds (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
-	public fun listKeys (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun getAllKeyIds (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun getAllKeys (Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun getKeyById (Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public fun removeKey (Ldev/msfjarvis/aps/data/crypto/GPGKeyPair;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 	public synthetic fun removeKey (Ldev/msfjarvis/aps/data/crypto/KeyPair;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
 }

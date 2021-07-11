@@ -161,7 +161,7 @@ class GopenpgpDecryptActivity : BasePgpActivity() {
       val result =
         withContext(Dispatchers.IO) {
           val privateKey =
-            keyManager.findKeyById(keyIds[0]).unwrap().getPrivateKey().decodeToString()
+            keyManager.getKeyById(keyIds[0]).unwrap().getPrivateKey().decodeToString()
 
           // TODO: this throws an error if passphrase is incorrect
           crypto.decrypt(

@@ -63,7 +63,7 @@ class KeySelectionViewModel @Inject constructor(private val keyManager: GPGKeyMa
 
   private suspend fun createGpgIdFile(): Result<Unit, Throwable> =
     withContext(Dispatchers.IO) {
-      return@withContext keyManager.listKeyIds().map { keys ->
+      return@withContext keyManager.getAllKeyIds().map { keys ->
         val idFile = File(PasswordRepository.getRepositoryDirectory(), ".gpg-id")
         if (idFile.exists()) return@map
 
