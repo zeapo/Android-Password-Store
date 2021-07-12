@@ -98,6 +98,7 @@ internal fun BaseAppModuleExtension.configureAndroidApplicationOptions(project: 
 @Suppress("UnstableApiUsage")
 internal fun TestedExtension.configureCommonAndroidOptions() {
   compileSdkVersion(30)
+  buildToolsVersion("30.0.3")
 
   defaultConfig {
     minSdkVersion(23)
@@ -107,6 +108,7 @@ internal fun TestedExtension.configureCommonAndroidOptions() {
   sourceSets {
     named("main") { java.srcDirs("src/main/kotlin") }
     named("test") { java.srcDirs("src/test/kotlin") }
+    named("androidTest") { java.srcDirs("src/androidTest/kotlin") }
   }
 
   packagingOptions {
@@ -114,6 +116,8 @@ internal fun TestedExtension.configureCommonAndroidOptions() {
     exclude("**/*.txt")
     exclude("**/*.kotlin_module")
     exclude("**/plugin.properties")
+    exclude("META-INF/AL2.0")
+    exclude("META-INF/LGPL2.1")
   }
 
   compileOptions {

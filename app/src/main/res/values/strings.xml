@@ -111,6 +111,8 @@
   <string name="pref_import_ssh_key_title">Import SSH key</string>
   <string name="pref_ssh_keygen_title">Generate SSH key pair</string>
   <string name="pref_ssh_see_key_title">View generated public SSH key</string>
+  <string name="pref_import_gpg_key_title">Import GPG key</string>
+  <string name="pref_import_gpg_key_summary">Add a GPG key to the internal keyring</string>
   <string name="pref_git_delete_repo_title">Delete repository</string>
   <string name="pref_dialog_delete_title">Clear repository</string>
   <string name="pref_category_general_title">General</string>
@@ -399,5 +401,9 @@
   <string name="otp_import_manual_hint_account">Account</string>
   <string name="gpg_key_select_mandatory">Selecting a GPG key is necessary to proceed</string>
   <string name="place_shortcut_on_home_screen">Place shortcut on home screen</string>
+
+  <!-- Gopenpgp Decrypt activity -->
+  <string name="passphrase_input_title">Enter Key Passphrase</string>
+  <string name="passphrase_input_hint">Passphrase</string>
 
 </resources>

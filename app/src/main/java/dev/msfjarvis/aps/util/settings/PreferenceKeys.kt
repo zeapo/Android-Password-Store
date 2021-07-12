@@ -82,4 +82,5 @@ object PreferenceKeys {
   const val PROXY_PASSWORD = "proxy_password"
 
   const val REBASE_ON_PULL = "rebase_on_pull"
+  const val IMPORT_GPG_KEY = "import_gpg_key"
 }

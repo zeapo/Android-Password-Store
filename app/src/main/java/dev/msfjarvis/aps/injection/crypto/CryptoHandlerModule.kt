@@ -20,6 +20,7 @@ import dev.msfjarvis.aps.data.crypto.GopenpgpCryptoHandler
 @Module
 @InstallIn(SingletonComponent::class)
 object CryptoHandlerModule {
+
   @Provides
   @IntoSet
   fun providePgpCryptoHandler(): CryptoHandler {
