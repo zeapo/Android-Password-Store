@@ -2,6 +2,7 @@ package dev.msfjarvis.aps.data.crypto
 
 import com.github.michaelbull.result.Err
 import com.github.michaelbull.result.Result
+import com.github.michaelbull.result.expect
 import com.github.michaelbull.result.map
 import com.github.michaelbull.result.runCatching
 import com.proton.Gopenpgp.crypto.Crypto
@@ -62,15 +63,13 @@ public class GPGKeyManager(
       if (!keyDirExists())
         return@withContext Err(IllegalStateException("Key directory does not exist"))
 
-      return@withContext runCatching {
-        keyDir.listFiles()?.forEach { file ->
-          if (file.isFile && file.nameWithoutExtension.lowercase() == id.lowercase()) {
-            val fileContent = file.readText()
-            return@runCatching keyFactory.create(Key(fileContent))
+      runCatching {
+        val keys = getGopenpgpKeys().expect { "Failed to get PGP keys" }
+        return@runCatching keyFactory.create(
+          keys.first { key ->
+            return@first getKeyIdentities(key).matches(id)
           }
-        }
-
-        error("Key with id: $id not found in directory")
+        )
       }
     }
 
@@ -94,17 +93,50 @@ public class GPGKeyManager(
     }
 
   override suspend fun getAllKeyIds(): Result<List<String>, Throwable> =
-    withContext(dispatcher) {
-      getAllKeys().map { keys -> keys.map { it.getKeyId() } }
-    }
+    withContext(dispatcher) { getAllKeys().map { keys -> keys.map { it.getKeyId() } } }
 
   override fun canHandle(fileName: String): Boolean {
-    println("Checking in " + javaClass.simpleName)
     return fileName.split('.').last() == "gpg"
+  }
+
+  private suspend fun getGopenpgpKeys(): Result<List<Key>, Throwable> = runCatching {
+    withContext(dispatcher) {
+      (keyDir.listFiles() ?: emptyArray()).map { file -> Crypto.newKeyFromArmored(file.readText()) }
+    }
+  }
+
+  private fun getKeyIdentities(key: Key): KeyIdentities {
+    val keyId = key.hexKeyID
+    val fingerprint = key.fingerprint
+    val email = key.userEmail
+    return KeyIdentities.create(keyId, fingerprint, email)
   }
 
   private fun keyDirExists(): Boolean {
     return keyDir.exists() || keyDir.mkdir()
+  }
+
+  /** Container class for identifying properties of a GPG key */
+  private class KeyIdentities
+  private constructor(val keyId: String, val fingerprint: String, val email: String) {
+    fun matches(identifier: String): Boolean {
+      val ident = identifier.lowercase()
+      return ident == keyId || ident == fingerprint || ident == email || ident == "<$email>"
+    }
+
+    companion object {
+      fun create(
+        keyId: String,
+        fingerprint: String,
+        email: String,
+      ): KeyIdentities {
+        return KeyIdentities(
+          keyId.lowercase(),
+          fingerprint.lowercase(),
+          email.lowercase(),
+        )
+      }
+    }
   }
 
   private companion object {
