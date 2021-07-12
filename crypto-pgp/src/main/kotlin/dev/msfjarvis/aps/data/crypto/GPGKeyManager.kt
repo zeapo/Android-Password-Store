@@ -2,6 +2,7 @@ package dev.msfjarvis.aps.data.crypto
 
 import com.github.michaelbull.result.Err
 import com.github.michaelbull.result.Result
+import com.github.michaelbull.result.map
 import com.github.michaelbull.result.runCatching
 import com.proton.Gopenpgp.crypto.Crypto
 import com.proton.Gopenpgp.crypto.Key
@@ -94,21 +95,7 @@ public class GPGKeyManager(
 
   override suspend fun getAllKeyIds(): Result<List<String>, Throwable> =
     withContext(dispatcher) {
-      if (!keyDirExists())
-        return@withContext Err(IllegalStateException("Key directory does not exist"))
-
-      return@withContext runCatching {
-        val keyIdList = arrayListOf<String>()
-
-        keyDir.listFiles()?.forEach { file ->
-          if (file.isFile && file.extension == "key") {
-            val fileContent = file.readText()
-            keyIdList.add(Key(fileContent).hexKeyID)
-          }
-        }
-
-        keyIdList
-      }
+      getAllKeys().map { keys -> keys.map { it.getKeyId() } }
     }
 
   override fun canHandle(fileName: String): Boolean {
